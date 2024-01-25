@@ -1,4 +1,4 @@
-from flask import Flask, send_file
+from flask import Flask, jsonify, send_file
 import os
 import random
 
@@ -21,13 +21,13 @@ def get_random_book(category):
             available_books = [book for book in books if not sent_books.get(book)]
 
             if not available_books:
-                return 'No more books available in this category.'
+                return jsonify({'error': 'No more books available in this category.'}), 404
             else:
                 random_book = random.choice(available_books)
                 sent_books[random_book] = True
-                return random_book
+                return jsonify({'book': random_book})
     except FileNotFoundError:
-        return 'Internal Server Error', 500
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
