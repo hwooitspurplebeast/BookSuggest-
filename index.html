@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+
+    #book-container {
+      max-width: 400px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* Add margin to the second button for spacing */
+    button:last-child {
+      margin-right: 0;
+      margin-top: 10px; /* Adjust the margin-top as needed */
+    }
+  </style>
+  <title>Book Suggestion Engine</title>
+  <script async src="https://cse.google.com/cse.js?cx=a6dddc59f6793402e"></script>
+</head>
+<body>
+  <div>
+    <label for="category">Select Book Category:</label>
+    <select id="category">
+      <option value="Novels">Novels</option>
+      <option value="Horror">Horror</option>
+      <option value="Comic">Comic</option>
+      <option value="KnowledgeBased">Knowledge Based</option>
+      <option value="lifestories">Life Stories</option>
+    </select>
+  </div>
+  <div id="book-container">
+    <h2>Book Suggestion:</h2>
+    <p id="book-suggestion"></p>
+    <button onclick="getRandomBook()">Get Another Suggestion</button>
+    <button onclick="searchCustomEngine()">Search with Custom Engine</button>
+  </div>
+  <script>
+    function getRandomBook() {
+      const category = document.getElementById('category').value;
+      fetch(`/getRandomBook/${category}`)
+        .then(response => response.text())
+        .then(book => {
+          document.getElementById('book-suggestion').innerText = book;
+        })
+        .catch(error => console.error('Error fetching random book:', error));
+    }
+
+    function searchCustomEngine() {
+      const bookName = document.getElementById('book-suggestion').innerText;
+      if (bookName) {
+        const searchQuery = encodeURIComponent(bookName);
+        const customSearchUrl = `https://bookengine.vercel.app/#gsc.tab=0&gsc.q=${searchQuery}&gsc.sort=`;
+        window.location.href = customSearchUrl;
+      }
+    }
+  </script>
+</body>
+</html>
